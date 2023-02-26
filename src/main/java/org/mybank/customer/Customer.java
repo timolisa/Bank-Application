@@ -10,6 +10,7 @@ public class Customer {
     private final String name;
     private final List<Account> accounts;
 
+
     public Customer(String name) {
         this.name = name;
         this.accounts = new ArrayList<>();

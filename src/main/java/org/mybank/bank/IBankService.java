@@ -1,11 +1,14 @@
-package org.mybank.customer;
+package org.mybank.bank;
 
 import org.mybank.bank.Account;
-import org.mybank.bank.AccountType;
+import org.mybank.customer.Customer;
 
 import java.util.List;
+import java.util.Map;
 
-public interface ICustomerRepository {
+public interface IBankService {
+    String getName();
+    Map<String, List<Account>> getCustomersRecords();
     void addCustomer(Customer customer);
     void removeCustomer(Customer customer);
     List<Customer> getCustomersByAccountType(AccountType accountType);

@@ -4,26 +4,28 @@ import org.mybank.customer.Customer;
 
 import java.util.*;
 
-public class Bank {
+public class IBankImpl implements IBankService{
     private final String name;
     private final List<Customer> customers;
     private final Map<String, List<Account>> customersRecords;
-    private final IBankService iBankService;
+    private IBankService iBankService;
 
-    public Bank(String name, IBankService iBankService) {
+    public IBankImpl(String name) {
         this.name = name;
         this.customers = new ArrayList<>();
         this.customersRecords = new HashMap<>();
-        this.iBankService = iBankService;
     }
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public Map<String, List<Account>> getCustomersRecords() {
         return customersRecords;
     }
 
+    @Override
     public void addCustomer(Customer customer) {
         customers.add(customer);
         String str = String.format("%s's account has been created successfully...", customer.getName());
@@ -36,6 +38,7 @@ public class Bank {
         } else throw new IllegalArgumentException("This customer already has an account with us...");
     }
 
+    @Override
     public void removeCustomer(Customer customer) {
         Customer customerToRemove = null;
         for (Customer c : customers) {
@@ -49,6 +52,7 @@ public class Bank {
         System.out.println(str);
         customersRecords.remove(customer.getName());
     }
+    @Override
     public List<Customer> getCustomersByAccountType(AccountType type) {
         System.out.printf("Customers with %s accounts\n", type.getTypeName());
         List<Customer> filteredAccounts = new ArrayList<>();
@@ -59,6 +63,7 @@ public class Bank {
         }
         return filteredAccounts;
     }
+    @Override
     public List<Customer> searchCustomersByName(String name) {
         List<Customer> matchingCustomers = new ArrayList<>();
         for (Customer customer : customers) {
@@ -68,20 +73,21 @@ public class Bank {
         }
         return matchingCustomers;
     }
+    @Override
     public Customer getNextCustomerToServe(AccountType type) {
         List<Customer> customersWithAccountType = getCustomersByAccountType(type);
         if (customersWithAccountType.isEmpty()) {
             return null;
         }
         return customersWithAccountType.stream().max(Comparator
-                        .comparing(Customer::getTotalBalance)).get();
+                .comparing(Customer::getTotalBalance)).get();
     }
 
+    @Override
     public List<Account> getAccountsForCustomer(String customerName) {
-        List<Account> customerAccounts = null;
         if(customersRecords.containsKey(customerName)) {
-            customerAccounts = customersRecords.get(customerName);
+            return customersRecords.get(customerName);
         }
-        return customerAccounts;
+        return null;
     }
 }
