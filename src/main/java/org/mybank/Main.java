@@ -40,6 +40,8 @@ public class Main {
         customer3.addAccount(currentAccount, 1000000);
         bank.addCustomer(customer3);
         ICustomerService ics = new CustomerServiceImpl(new IBankImpl("JP Morgan Bank"));
-        ics.makeDeposit(customer3, 20000, );
+//        ics.makeDeposit(customer3, 20000, currentAccount);
+        System.out.println(customer3.getTotalBalance());
+        ics.makeDeposit(customer1, 2000.0, currentAccount);
     }
 }

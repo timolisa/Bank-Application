@@ -32,6 +32,10 @@ public class Account {
         transactions.add(new Transaction(transactionType, time, balance));
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
