@@ -27,8 +27,8 @@ public class Customer {
     public void addAccount(AccountType type, double balance) {
         iCustomerService.addAccount(type, balance);
     }
-    public boolean hasAccountType(AccountType accoutType) {
-        return iCustomerService.hasAccountType(accoutType);
+    public boolean hasAccountType(AccountType accountType) {
+        return iCustomerService.hasAccountType(accountType);
     }
     public double getTotalBalance() {
         return iCustomerService.getTotalBalance();

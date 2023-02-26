@@ -29,7 +29,8 @@ public class Main {
         System.out.println(bank.getCustomersRecords());
         System.out.println("Search result: " + bank.searchCustomersByName("Timothy Ngonadi"));
 
-        Customer customer3 = new Customer("Bill Gates", ics);
+        ICustomerService ics2 = new CustomerServiceImpl(ibs);
+        Customer customer3 = new Customer("Bill Gates", ics2);
         customer3.addAccount(currentAccount, 1000000);
         bank.addCustomer(customer3);
 //        ics.makeDeposit(customer3, 20000, currentAccount);
