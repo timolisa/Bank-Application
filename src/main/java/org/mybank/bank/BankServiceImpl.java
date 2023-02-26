@@ -4,13 +4,13 @@ import org.mybank.customer.Customer;
 
 import java.util.*;
 
-public class IBankImpl implements IBankService{
+public class BankServiceImpl implements IBankService{
     private final String name;
     private final List<Customer> customers;
     private final Map<String, List<Account>> customersRecords;
     private IBankService iBankService;
 
-    public IBankImpl(String name) {
+    public BankServiceImpl(String name) {
         this.name = name;
         this.customers = new ArrayList<>();
         this.customersRecords = new HashMap<>();

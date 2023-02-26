@@ -2,66 +2,45 @@ package org.mybank.customer;
 
 import org.mybank.bank.Account;
 import org.mybank.bank.AccountType;
+import org.mybank.bank.IBankService;
 
 import java.util.List;
 import java.util.ArrayList;
 
 public class Customer {
     private final String name;
-    private final List<Account> accounts;
+    private final ICustomerService iCustomerService;
 
 
-    public Customer(String name) {
+    public Customer(String name, ICustomerService iCustomerService) {
         this.name = name;
-        this.accounts = new ArrayList<>();
+        this.iCustomerService = iCustomerService;
     }
     public String getName() {
         return name;
     }
 
     public List<Account> getAccounts() {
-        return accounts;
+        return iCustomerService.getAccounts();
     }
 
     public void addAccount(AccountType type, double balance) {
-        if (hasAccountType(type)) {
-            throw new IllegalArgumentException("Customer already has account type " + type.getTypeName());
-        }
-        if (balance < type.getMinBalance() || balance > type.getMaxBalance()) {
-            throw new IllegalArgumentException("Balance is outside the range for this account type.");
-        }
-        accounts.add(new Account(type, balance));
+        iCustomerService.addAccount(type, balance);
     }
-    public boolean hasAccountType(AccountType type) {
-        for (Account account : accounts) {
-            if (account.getType().equals(type)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean hasAccountType(AccountType accoutType) {
+        return iCustomerService.hasAccountType(accoutType);
     }
     public double getTotalBalance() {
-        double total = 0;
-        for (Account account : accounts) {
-            total += account.getBalance();
-        }
-        return total;
+        return iCustomerService.getTotalBalance();
     }
     public Account getAccountWithHighestBalance() {
-        Account highestAccount = null;
-        for (Account account : accounts) {
-            if (highestAccount == null || account.getBalance() > highestAccount.getBalance()) {
-                highestAccount = account;
-            }
-        }
-        return highestAccount;
+        return iCustomerService.getAccountWithHighestBalance();
     }
 
     @Override
     public String toString() {
         return "Customer{" +
                 "name='" + name + '\'' +
-                ", accounts=" + accounts +
                 '}';
     }
 }

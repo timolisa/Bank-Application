@@ -6,20 +6,69 @@ import org.mybank.bank.IBankService;
 import org.mybank.bank.Transaction;
 import org.mybank.enums.TransactionType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerServiceImpl implements ICustomerService{
     IBankService iBankService;
+    private final List<Account> accounts;
 
     public CustomerServiceImpl(IBankService iBankService) {
         this.iBankService = iBankService;
+        this.accounts = new ArrayList<>();
+    }
+
+    @Override
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    @Override
+    public void addAccount(AccountType accountType, double balance) {
+        if (hasAccountType(accountType)) {
+            throw new IllegalArgumentException("Customer already has account type " + accountType.getTypeName());
+        }
+        if (balance < accountType.getMinBalance() || balance > accountType.getMaxBalance()) {
+            throw new IllegalArgumentException("Balance is outside the range for this account type.");
+        }
+        accounts.add(new Account(accountType, balance));
+    }
+
+    @Override
+    public boolean hasAccountType(AccountType accountType) {
+        for (Account account : accounts) {
+            if (account.getType().equals(accountType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public double getTotalBalance() {
+        double total = 0;
+        for (Account account : accounts) {
+            total += account.getBalance();
+        }
+        return total;
+    }
+
+    @Override
+    public Account getAccountWithHighestBalance() {
+        Account highestAccount = null;
+        for (Account account : accounts) {
+            if (highestAccount == null || account.getBalance() > highestAccount.getBalance()) {
+                highestAccount = account;
+            }
+        }
+        return highestAccount;
     }
 
     @Override
     public void makeDeposit(Customer customer, double amount, AccountType accountType) {
         if(iBankService.getCustomersRecords().containsKey(customer.getName())) {
             for (Account a : iBankService.getAccountsForCustomer(customer.getName())) {
-                if (a.getType().equals((accountType))) {
+                if (a.getType().equals(accountType)) {
                     a.setBalance(TransactionType.CREDIT, amount);
                     System.out.printf("%s deposited %.2f successfully...\n", customer.getName(), amount);
                     break;
@@ -31,7 +80,7 @@ public class CustomerServiceImpl implements ICustomerService{
     }
 
     @Override
-    public void withdraw(Customer customer, double amount, AccountType accountType) {
+    public void makeWithdrawal(Customer customer, double amount, AccountType accountType) {
         if (iBankService.getCustomersRecords().containsKey(customer.getName())) {
             for (Account a : iBankService.getAccountsForCustomer(customer.getName())) {
                 if (a.getType().equals(accountType) && a.getBalance() >= amount) {
@@ -40,6 +89,8 @@ public class CustomerServiceImpl implements ICustomerService{
                     break;
                 }
             }
+        } else {
+            throw new IllegalArgumentException("Insufficient funds...");
         }
     }
 
@@ -56,6 +107,5 @@ public class CustomerServiceImpl implements ICustomerService{
                 return;
             }
         }
-        System.out.println("No such account was found...");
     }
 }
