@@ -14,4 +14,5 @@ public interface ICustomerService {
     void makeDeposit(Customer customer, double amount, AccountType accountType);
     void makeWithdrawal(Customer customer, double amount, AccountType accountType);
     void getStatementOfAccount(Customer customer, AccountType accountType);
+    void printAvailableBalance(Customer customer, AccountType accountType);
 }

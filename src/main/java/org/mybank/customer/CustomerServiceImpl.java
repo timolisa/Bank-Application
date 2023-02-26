@@ -69,8 +69,10 @@ public class CustomerServiceImpl implements ICustomerService{
         if(iBankService.getCustomersRecords().containsKey(customer.getName())) {
             for (Account a : iBankService.getAccountsForCustomer(customer.getName())) {
                 if (a.getType().equals(accountType)) {
-                    a.setBalance(TransactionType.CREDIT, amount);
+                    a.setBalance(amount);
+                    a.addTransactions(TransactionType.CREDIT, amount);
                     System.out.printf("%s deposited %.2f successfully...\n", customer.getName(), amount);
+                    printAvailableBalance(customer, accountType);
                     break;
                 }
             }
@@ -84,8 +86,10 @@ public class CustomerServiceImpl implements ICustomerService{
         if (iBankService.getCustomersRecords().containsKey(customer.getName())) {
             for (Account a : iBankService.getAccountsForCustomer(customer.getName())) {
                 if (a.getType().equals(accountType) && a.getBalance() >= amount) {
-                    a.setBalance(TransactionType.DEBIT, a.getBalance() - amount);
+                    a.setBalance(a.getBalance() - amount);
+                    a.addTransactions(TransactionType.DEBIT, amount);
                     System.out.printf("%s withdrew %.2f successfully...\n", customer.getName(), amount);
+                    printAvailableBalance(customer, accountType);
                     break;
                 }
             }
@@ -97,14 +101,22 @@ public class CustomerServiceImpl implements ICustomerService{
     @Override
     public void getStatementOfAccount(Customer customer, AccountType accountType) {
         System.out.println("STATEMENT OF ACCOUNT...");
-        List<Account> accounts = customer.getAccounts();
+        List<Account> accounts = iBankService.getAccountsForCustomer(customer.getName());
         for (Account account : accounts) {
             if (account.getType().equals(accountType)) {
                 List<Transaction> transactions = account.getTransactions();
                 for (Transaction transaction : transactions) {
-                    System.out.println(transaction);
+                    System.out.println(transaction.toString());
                 }
-                return;
+                break;
+            }
+        }
+    }
+    public void printAvailableBalance(Customer customer, AccountType accountType) {
+        for (Account account : customer.getAccounts()) {
+            if (account.getType().equals(accountType)) {
+                System.out.printf("Available balance: %.2f\n", account.getBalance());
+                break;
             }
         }
     }

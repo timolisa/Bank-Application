@@ -36,5 +36,10 @@ public class Main {
 //        ics.makeDeposit(customer3, 20000, currentAccount);
         System.out.println(customer3.getTotalBalance());
         ics.makeDeposit(customer1, 2000.0, currentAccount);
+        ics.makeDeposit(customer1, 25000.0, currentAccount);
+        System.out.println(bank.getCustomersRecords());
+        System.out.println(customer3.getAccountWithHighestBalance());
+        ics2.getStatementOfAccount(customer3, currentAccount);
+
     }
 }

@@ -36,7 +36,6 @@ public class Customer {
     public Account getAccountWithHighestBalance() {
         return iCustomerService.getAccountWithHighestBalance();
     }
-
     @Override
     public String toString() {
         return "Customer{" +

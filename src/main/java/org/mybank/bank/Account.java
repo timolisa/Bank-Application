@@ -27,13 +27,15 @@ public class Account {
         return balance;
     }
 
-    public void setBalance(TransactionType transactionType, double balance) {
+    public void setBalance(double balance) {
         this.balance += balance;
-        transactions.add(new Transaction(transactionType, time, balance));
     }
 
     public List<Transaction> getTransactions() {
         return transactions;
+    }
+    public void addTransactions(TransactionType transactionType, double amount) {
+        transactions.add(new Transaction(transactionType, time, amount));
     }
 
     @Override
